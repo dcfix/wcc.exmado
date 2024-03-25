@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row align-items-start">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                {% crispy form %}
+                <div class="card-text">
+                    <table class="table">
+                        <tr><th>Date</th><th>Volunteer</th><th>Activity</th><th>Hours</th><th>Mileage</th></tr>
+                    {% for entry in entries %}
+                        <tr><td>{{ entry.volunteer_date | date:'m-d-Y' }}</td>
+                            <td>{{ entry.volunteer__username }}</td>
+                            <td>{{ entry.volunteer_task__desc }}</td>
+                            <td>{{ entry.total_hours|floatformat:"2" }}</td>
+                            <td>{{ entry.total_mileage|floatformat:"2"}}</td></tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> <!-- col -->
+</div>
+
+
+{% endblock %}

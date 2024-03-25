@@ -1,0 +1,38 @@
+{%  extends "base.html" %}
+
+
+{% block content %}
+    <div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+    <div class="card">
+    <div class="card-header text-center">
+    <h1>Quick Checkin</h1>
+    </div>
+
+    <table class="table">
+        <tbody>
+
+        {% for event in events %}
+        <tr><td class="text-center">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a href="{% url 'checkin' event.id %}"
+                   class="btn btn-primary btn-lg" tabindex="-1" role="button" aria-disabled="true">{{ event.desc }}</a>
+            </div>
+        </td></tr>
+        {% endfor %}
+        <tr><td class="text-center">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a href="{% url 'checkin-category' %}"
+                   class="btn btn-secondary btn-lg" tabindex="-1" role="button" aria-disabled="true">Cancel</a>
+            </div>
+        </td></tr>
+        </tbody>
+
+
+    </table>
+
+   </div>
+    </div>
+    </div>
+
+{% endblock %}
