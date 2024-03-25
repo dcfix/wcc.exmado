@@ -25,7 +25,7 @@ SECRET_KEY = 'ju)p=)zdu&y+4pa33qm_e*r9&#9yy&0tk@$((iey7#21*b89(m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['wcc.exmado.com', 'exmado.com', '127.0.0.1']
 
 
 # Application definition
@@ -126,7 +126,17 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+
+
 AUTH_USER_MODEL = 'member.CustomUser'
 
 LOGIN_REDIRECT_URL = "route-login"
