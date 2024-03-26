@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
 from django.shortcuts import render
 
@@ -37,6 +38,10 @@ def dashboard(request):
 
 @login_required
 def rpt_timeframe(request):
+    # must be staff to view the report
+
+    if not request.user.is_staff:
+        raise PermissionDenied
     # given a time frame, give the cumulative hours/miles per volunteer
     form = ReportVolunteerTimeframe(request.POST)
     if request.method == "POST":
