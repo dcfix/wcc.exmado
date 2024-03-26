@@ -15,11 +15,16 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'log-hours' %}">Volunteer</a>
         </li>
-            {% if user.is_superuser %}
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'rpt_timeframe' %}#">Reports</a>
-            </li>
-            {% endif %}
+        {% if user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'rpt_timeframe' %}#">Reports</a>
+        </li>
+        {% endif %}
+        {% if user.is_superuser %}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'admin:index' %}#">Admin</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">Log out</a>
         </li>
