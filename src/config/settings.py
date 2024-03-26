@@ -25,7 +25,7 @@ SECRET_KEY = 'ju)p=)zdu&y+4pa33qm_e*r9&#9yy&0tk@$((iey7#21*b89(m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['wcc.exmado.com', 'exmado.com', '127.0.0.1']
+ALLOWED_HOSTS = ['wcc.exmado.com', 'exmado.com', 'localhost']
 
 
 # Application definition
@@ -135,9 +135,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-
-
 AUTH_USER_MODEL = 'member.CustomUser'
 
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = "route-login"
-LOGOUT_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "login"

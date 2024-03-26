@@ -12,4 +12,5 @@ class CustomUser(AbstractUser):
 
     class Meta:
         # …
-        permissions = (("is_kiosk_user", "Kiosk mode only."),)
+        permissions = (("is_kiosk_user", "Kiosk mode only."),
+                       )

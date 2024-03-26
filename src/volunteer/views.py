@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+from django.shortcuts import render
 
 from .forms import LogVolunteerHours, ReportVolunteerTimeframe
-from django.views import generic
 from .models import Entry
 
 import datetime
@@ -35,10 +35,10 @@ def dashboard(request):
     return render(request, 'volunteer/dashboard.html', context)
 
 
+@login_required
 def rpt_timeframe(request):
     # given a time frame, give the cumulative hours/miles per volunteer
     form = ReportVolunteerTimeframe(request.POST)
-
     if request.method == "POST":
         # we need to grab the start and end dates for this report
 
@@ -52,6 +52,8 @@ def rpt_timeframe(request):
     else:
         start_date = datetime.date.today() - datetime.timedelta(days=20)
         end_date = datetime.date.today()
+        form.start_date = start_date
+        form.end_date = end_date
 
     entries = Entry.objects.filter(volunteer_date__range=[start_date, end_date])\
         .values('volunteer_date', 'volunteer__username', 'volunteer_task__desc')\
@@ -65,6 +67,7 @@ def rpt_timeframe(request):
 
 
 
+@login_required
 def log_hours(request):
     if request.method == "POST":
         # Create a form instance and populate it with data from the request (binding):

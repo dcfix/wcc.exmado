@@ -26,8 +26,8 @@ def login_routing(request):
             # redirect them to the kiosk page
             print("here we go, kiosk mode!")
             return redirect('/checkin/')
-    else:
+    elif request.user.is_superuser:
         # send them to the volunteer page
-        return redirect('log-hours')
+        return redirect('rpt_timeframe')
 
     return redirect('log-hours')
