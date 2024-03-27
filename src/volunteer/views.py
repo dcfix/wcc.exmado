@@ -22,7 +22,6 @@ def list_entries(request):
     # we will get the entries for a given time frame (since last monday)
     entries = Entry.objects.filter(volunteer=request.user)
 
-
     context = {
         'entries': entries,
     }
@@ -34,6 +33,8 @@ def dashboard(request):
 
     context = {}
     return render(request, 'volunteer/dashboard.html', context)
+
+
 
 
 @login_required
@@ -55,8 +56,8 @@ def rpt_timeframe(request):
             start_date = form.cleaned_data["start_date"]
             end_date = form.cleaned_data["end_date"]
     else:
-        start_date = datetime.date.today() - datetime.timedelta(days=20)
-        end_date = datetime.date.today()
+        start_date = datetime.date.today() - datetime.timedelta(days=7)
+        end_date = datetime.date.today() + datetime.timedelta(days=1)
         form.start_date = start_date
         form.end_date = end_date
 

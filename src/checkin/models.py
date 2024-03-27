@@ -100,3 +100,4 @@ class CheckIn(models.Model):
     def __get_absolute_url(self):
         """Returns the URL to access a detail record for this Category"""
         return reverse('category-detail', args=[str(self.id)])
+
