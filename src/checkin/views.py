@@ -64,13 +64,13 @@ def checkin_final(request, event_id=2):
 @login_required
 def rpt_timeframe_activity(request):
     # must be staff to view the report
+    if not request.user.is_staff:
+        raise PermissionDenied
 
     form = ReportVolunteerTimeframe()
     start_date = datetime.date.today() - datetime.timedelta(days=7)
     end_date = datetime.date.today() + datetime.timedelta(days=2)
 
-    if not request.user.is_staff:
-        raise PermissionDenied
     # given a time frame, give the cumulative hours/miles per volunteer
     if request.method == "POST":
         # we need to grab the start and end dates for this report

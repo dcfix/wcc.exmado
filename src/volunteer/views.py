@@ -43,8 +43,13 @@ def rpt_timeframe(request):
 
     if not request.user.is_staff:
         raise PermissionDenied
+
+    start_date = datetime.date.today() - datetime.timedelta(days=7)
+    end_date = datetime.date.today() + datetime.timedelta(days=2)
+
+    form = ReportVolunteerTimeframe()
+
     # given a time frame, give the cumulative hours/miles per volunteer
-    form = ReportVolunteerTimeframe(request.POST)
     if request.method == "POST":
         # we need to grab the start and end dates for this report
 
@@ -56,8 +61,6 @@ def rpt_timeframe(request):
             start_date = form.cleaned_data["start_date"]
             end_date = form.cleaned_data["end_date"] + datetime.timedelta(days=1)
     else:
-        start_date = datetime.date.today() - datetime.timedelta(days=7)
-        end_date = datetime.date.today() + datetime.timedelta(days=1)
         form.start_date = start_date
         form.end_date = end_date
 
