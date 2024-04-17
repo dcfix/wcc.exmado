@@ -36,7 +36,12 @@ class ReportVolunteerTimeframe(forms.Form):
         self.helper.add_input(Submit('submit', 'Submit'))
 
     start_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
-                                                            attrs={'type': 'date', 'max': datetime.now().date()}))
+                                                        attrs={'type': 'date',
+                                                               'maxDate': datetime.now().date(),
+                                                               'date': datetime.now().date(),
+                                                               }))
+
 
     end_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
-                                                          attrs={'type': 'date', 'max': datetime.now().date()}))
+                                                      attrs={'type': 'date',
+                                                             'maxDate': datetime.now().date()}))

@@ -54,7 +54,7 @@ def rpt_timeframe(request):
         if form.is_valid():
             # we need to save the new data
             start_date = form.cleaned_data["start_date"]
-            end_date = form.cleaned_data["end_date"]
+            end_date = form.cleaned_data["end_date"] + datetime.timedelta(days=1)
     else:
         start_date = datetime.date.today() - datetime.timedelta(days=7)
         end_date = datetime.date.today() + datetime.timedelta(days=1)
