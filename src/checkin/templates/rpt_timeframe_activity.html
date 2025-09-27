@@ -8,12 +8,60 @@
             <div class="card-body">
                 {% crispy form %}
                 <div class="card-text">
-                    <table class="table">
-                        <tr><th>Activity</th><th>Attendance</th></tr>
-                    {% for entry in entries %}
-                        <tr><td>{{ entry.event__desc }}</td>
-                            <td>{{ entry.total_attendance }}</td>
-                    {% endfor %}
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Activity</th>
+                                <th>Members</th>
+                                <th>Guests</th>
+                                <th>Unknown</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for entry in entries %}
+                            <tr>
+                                <td><strong>{{ entry.event_name }}</strong></td>
+                                <td>
+                                    {% if entry.member_count > 0 %}
+                                        <span class="badge bg-success">{{ entry.member_count }}</span>
+                                    {% else %}
+                                        <span class="text-muted">0</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if entry.guest_count > 0 %}
+                                        <span class="badge bg-warning text-dark">{{ entry.guest_count }}</span>
+                                    {% else %}
+                                        <span class="text-muted">0</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if entry.unknown_count > 0 %}
+                                        <span class="badge bg-secondary">{{ entry.unknown_count }}</span>
+                                    {% else %}
+                                        <span class="text-muted">0</span>
+                                    {% endif %}
+                                </td>
+                                <td><strong>{{ entry.total_count }}</strong></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No check-ins found for this date range.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        {% if totals.grand_total > 0 %}
+                        <tfoot class="table-secondary">
+                            <tr>
+                                <th>TOTALS</th>
+                                <th><span class="badge bg-success">{{ totals.total_members }}</span></th>
+                                <th><span class="badge bg-warning text-dark">{{ totals.total_guests }}</span></th>
+                                <th><span class="badge bg-secondary">{{ totals.total_unknown }}</span></th>
+                                <th><strong>{{ totals.grand_total }}</strong></th>
+                            </tr>
+                        </tfoot>
+                        {% endif %}
                     </table>
                 </div>
             </div>
