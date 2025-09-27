@@ -80,6 +80,8 @@ class CheckIn(models.Model):
                             null=True)
 
     event = models.ForeignKey('Event', on_delete=models.RESTRICT, null=False)
+    isMember = models.BooleanField(null=True)
+
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
                                    on_delete=models.RESTRICT,

@@ -7,7 +7,11 @@
     <div class="card-header text-center">
     <h1>Quick Checkin</h1>
     <h1>{{ event_desc }}</h1>
-
+    {% if is_member %}
+        <span class="badge bg-success fs-6">Member</span>
+    {% else %}
+        <span class="badge bg-warning fs-6">Guest</span>
+    {% endif %}
     </div>
     <form action="" method="post">
         {% csrf_token %}

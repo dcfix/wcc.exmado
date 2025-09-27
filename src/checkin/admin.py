@@ -25,9 +25,9 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(CheckIn)
 class CheckInAdmin(admin.ModelAdmin):
-    list_display = ('event', 'number_in_group', 'note', 'created_date')
+    list_display = ('event', 'number_in_group', 'note', 'isMember', 'created_date')
 
-    fields = ['event', 'number_in_group', 'note',
+    fields = ['event', 'number_in_group', 'note', 'IsMember',
               ('created_by', 'created_date'),
               ('modified_by', 'modified_date')]
     readonly_fields = ['created_by', 'created_date', 'modified_by', 'modified_date']
