@@ -23,6 +23,14 @@ class LogVolunteerHours(forms.Form):
                                                             attrs={'type': 'date', 'max': datetime.now().date()}))
     hours = forms.DecimalField(label="Hours", required=True, initial=0)
     mileage = forms.DecimalField(label="Mileage", required=True, initial=0)
+    meal = forms.TypedChoiceField(
+        label="Took meal?",
+        choices=((0, 'No'), (1, 'Yes')),
+        coerce=int,
+        widget=forms.RadioSelect(),
+        initial=0,
+        required=False,
+        help_text='0 = no meal, 1 = meal')
     notes = forms.CharField(label="Additional notes or feedback", required=False)
 
 

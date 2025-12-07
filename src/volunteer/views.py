@@ -68,7 +68,8 @@ def rpt_timeframe(request):
         .values('volunteer_date', 'volunteer__username', 'volunteer_task__desc')\
         .order_by('volunteer_date', 'volunteer_task__desc')\
         .annotate(total_hours=Sum('hours'))\
-        .annotate(total_mileage=Sum('mileage'))
+        .annotate(total_mileage=Sum('mileage'))\
+        .annotate(total_meals=Sum('meal'))
 
     context = {"form": form,
                "entries": entries}
@@ -92,6 +93,7 @@ def log_hours(request):
             entry.volunteer_date = form.cleaned_data["volunteer_date"]
             entry.hours = form.cleaned_data["hours"]
             entry.mileage = form.cleaned_data["mileage"]
+            entry.meal = form.cleaned_data.get("meal", 0)
             entry.notes = form.cleaned_data["notes"]
 
             entry.save()

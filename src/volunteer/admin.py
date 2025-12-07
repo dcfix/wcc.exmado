@@ -12,9 +12,9 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
-    list_display = ('volunteer', 'volunteer_date', 'volunteer_task', 'hours', 'mileage', 'active')
+    list_display = ('volunteer', 'volunteer_date', 'volunteer_task', 'hours', 'mileage', 'meal', 'active')
 
-    fields = ['volunteer', 'volunteer_date', 'volunteer_task', 'hours', 'mileage', 'notes', 'active',
+    fields = ['volunteer', 'volunteer_date', 'volunteer_task', 'hours', 'mileage', 'meal', 'notes', 'active',
               ('created_by', 'created_date'),
               ('modified_by', 'modified_date')]
 

@@ -20,9 +20,9 @@
                 <div class="card-header">Entries for the past 7 days</div>
                 <div class="card-text">
                     <table class="table">
-                    <tr><th>Date</th><th>Activity</th><th>Hours</th><th>Mileage</th></tr>
+                    <tr><th>Date</th><th>Activity</th><th>Hours</th><th>Mileage</th><th>Meals</th></tr>
                     {% for entry in entries %}
-                        <tr><td>{{ entry.volunteer_date | date:'m-d-Y' }}</td><td>{{ entry.volunteer_task }}</td><td>{{ entry.hours }}</td><td>{{ entry.mileage }}</td></tr>
+                        <tr><td>{{ entry.volunteer_date | date:'m-d-Y' }}</td><td>{{ entry.volunteer_task }}</td><td>{{ entry.hours }}</td><td>{{ entry.mileage }}</td><td>{{ entry.meal }}</td></tr>
                     {% endfor %}
                     </table>
                 </div>
