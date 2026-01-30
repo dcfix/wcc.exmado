@@ -25,7 +25,7 @@ SECRET_KEY = 'ju)p=)zdu&y+4pa33qm_e*r9&#9yy&0tk@$((iey7#21*b89(m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['wcc.exmado.com', 'exmado.com', 'localhost', "127.0.0.1"]
+ALLOWED_HOSTS = ['wcc.exmado.com', 'exmado.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
