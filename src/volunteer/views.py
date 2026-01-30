@@ -122,6 +122,41 @@ def rpt_timeframe(request):
     return render(request, 'volunteer/rpt_timeframe.html', context)
 
 
+@login_required
+def rpt_cat_hours(request):
+    # must be staff to view the report
+    if not request.user.is_staff:
+        raise PermissionDenied
+
+    start_date = datetime.date.today() - datetime.timedelta(days=7)
+    end_date = datetime.date.today() + datetime.timedelta(days=2)
+
+    form = ReportVolunteerTimeframe()
+
+    if request.method == "POST":
+        form = ReportVolunteerTimeframe(request.POST)
+        if form.is_valid():
+            start_date = form.cleaned_data["start_date"]
+            end_date = form.cleaned_data["end_date"] + datetime.timedelta(days=1)
+    else:
+        form.start_date = start_date
+        form.end_date = end_date
+
+    qs = Entry.objects.filter(volunteer_date__range=[start_date, end_date])
+
+    # sum hours per activity (task description)
+    categories = qs.values('volunteer_task__desc')\
+        .order_by('volunteer_task__desc')\
+        .annotate(total_hours=Sum('hours'))
+
+    overall = qs.aggregate(total_hours=Sum('hours'))
+
+    context = {"form": form,
+               "categories": categories,
+               "overall": overall}
+    return render(request, 'volunteer/rpt_cat_hours.html', context)
+
+
 
 @login_required
 def log_hours(request):

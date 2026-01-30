@@ -1,0 +1,33 @@
+{% extends "home.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row align-items-start">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                {% crispy form %}
+                <div class="card-text">
+                    <table class="table">
+                        <tr><th>Activity</th><th class="text-end">Hours</th></tr>
+                        {% for cat in categories %}
+                            <tr>
+                                <td>{{ cat.volunteer_task__desc|default:"Unspecified" }}</td>
+                                <td class="text-end">{{ cat.total_hours|default:0|floatformat:"2" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="2">No activity records found for this period.</td></tr>
+                        {% endfor %}
+                        <tr class="fw-bold">
+                            <td>Overall Total Hours</td>
+                            <td class="text-end">{{ overall.total_hours|default:0|floatformat:"2" }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> <!-- col -->
+</div>
+
+
+{% endblock %}
