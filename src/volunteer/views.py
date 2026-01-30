@@ -4,8 +4,9 @@ from django.db.models import Sum
 from django.db.models.functions import TruncDate
 from collections import OrderedDict
 from django.shortcuts import render
+from collections import OrderedDict
 
-from .forms import LogVolunteerHours, ReportVolunteerTimeframe
+from .forms import LogVolunteerHours, ReportVolunteerTimeframe, ReportCategoryHours
 from .models import Entry
 
 import datetime
@@ -132,9 +133,12 @@ def rpt_cat_hours(request):
     end_date = datetime.date.today() + datetime.timedelta(days=2)
 
     form = ReportVolunteerTimeframe()
+    form = ReportCategoryHours()
 
     if request.method == "POST":
-        form = ReportVolunteerTimeframe(request.POST)
+
+        form = ReportCategoryHours(request.POST)
+
         if form.is_valid():
             start_date = form.cleaned_data["start_date"]
             end_date = form.cleaned_data["end_date"] + datetime.timedelta(days=1)
