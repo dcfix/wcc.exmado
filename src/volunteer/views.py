@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
+from django.db.models.functions import TruncDate
 from django.shortcuts import render
 
 from .forms import LogVolunteerHours, ReportVolunteerTimeframe
@@ -64,16 +65,95 @@ def rpt_timeframe(request):
         form.start_date = start_date
         form.end_date = end_date
 
-    entries = Entry.objects.filter(volunteer_date__range=[start_date, end_date])\
-        .values('volunteer_date', 'volunteer__username', 'volunteer_task__desc')\
-        .order_by('volunteer_date', 'volunteer_task__desc')\
+    qs = Entry.objects.filter(volunteer_date__range=[start_date, end_date])
+
+    # aggregate totals per volunteer
+    entries = qs.values('volunteer__id', 'volunteer__username')\
+        .order_by('volunteer__username')\
         .annotate(total_hours=Sum('hours'))\
         .annotate(total_mileage=Sum('mileage'))\
         .annotate(total_meals=Sum('meal'))
 
+    # group by date -> volunteer -> task (date -> volunteer -> tasks + totals)
+    grouped_qs = qs.annotate(date=TruncDate('volunteer_date'))\
+        .values('date', 'volunteer__username', 'volunteer_task__desc')\
+        .order_by('date', 'volunteer__username', 'volunteer_task__desc')\
+        .annotate(total_hours=Sum('hours'), total_mileage=Sum('mileage'), total_meals=Sum('meal'))
+
+    grouped = OrderedDict()
+    for row in grouped_qs:
+        date = row['date']
+        volunteer = row.get('volunteer__username') or 'Unknown'
+        task = row['volunteer_task__desc'] or 'Unspecified'
+        hours = row.get('total_hours') or 0
+        mileage = row.get('total_mileage') or 0
+        meals = row.get('total_meals') or 0
+
+        if date not in grouped:
+            grouped[date] = OrderedDict()
+
+        if volunteer not in grouped[date]:
+            grouped[date][volunteer] = {
+                'totals': {'hours': 0.0, 'mileage': 0.0, 'meals': 0},
+                'tasks': OrderedDict()
+            }
+
+        if task not in grouped[date][volunteer]['tasks']:
+            grouped[date][volunteer]['tasks'][task] = {'hours': 0.0, 'mileage': 0.0, 'meals': 0}
+
+        # set task-level totals (this row is already aggregated per volunteer/task/day)
+        grouped[date][volunteer]['tasks'][task]['hours'] = float(hours)
+        grouped[date][volunteer]['tasks'][task]['mileage'] = float(mileage)
+        grouped[date][volunteer]['tasks'][task]['meals'] = int(meals)
+
+        # accumulate volunteer-level totals
+        grouped[date][volunteer]['totals']['hours'] += float(hours)
+        grouped[date][volunteer]['totals']['mileage'] += float(mileage)
+        grouped[date][volunteer]['totals']['meals'] += int(meals)
+
+    # overall totals for the period
+    overall = qs.aggregate(total_hours=Sum('hours'), total_mileage=Sum('mileage'), total_meals=Sum('meal'))
+
     context = {"form": form,
-               "entries": entries}
+               "entries": entries,
+               "grouped": grouped,
+               "overall": overall}
     return render(request, 'volunteer/rpt_timeframe.html', context)
+
+
+@login_required
+def rpt_cat_hours(request):
+    # must be staff to view the report
+    if not request.user.is_staff:
+        raise PermissionDenied
+
+    start_date = datetime.date.today() - datetime.timedelta(days=7)
+    end_date = datetime.date.today() + datetime.timedelta(days=2)
+
+    form = ReportVolunteerTimeframe()
+
+    if request.method == "POST":
+        form = ReportVolunteerTimeframe(request.POST)
+        if form.is_valid():
+            start_date = form.cleaned_data["start_date"]
+            end_date = form.cleaned_data["end_date"] + datetime.timedelta(days=1)
+    else:
+        form.start_date = start_date
+        form.end_date = end_date
+
+    qs = Entry.objects.filter(volunteer_date__range=[start_date, end_date])
+
+    # sum hours per activity (task description)
+    categories = qs.values('volunteer_task__desc')\
+        .order_by('volunteer_task__desc')\
+        .annotate(total_hours=Sum('hours'))
+
+    overall = qs.aggregate(total_hours=Sum('hours'))
+
+    context = {"form": form,
+               "categories": categories,
+               "overall": overall}
+    return render(request, 'volunteer/rpt_cat_hours.html', context)
 
 
 

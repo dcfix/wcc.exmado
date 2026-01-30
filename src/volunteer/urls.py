@@ -6,4 +6,5 @@ urlpatterns = [
     path('log/', views.log_hours, name="log-hours"),
     path('dashboard/', views.dashboard, name="dashboard"),
     path('rpt_timeframe/', views.rpt_timeframe, name="rpt_timeframe"),
+    path('rpt_cat_hours/', views.rpt_cat_hours, name="rpt_cat_hours"),
 ]
