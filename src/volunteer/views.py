@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
 from django.db.models.functions import TruncDate
-from collections import OrderedDict
 from django.shortcuts import render
 
 from .forms import LogVolunteerHours, ReportVolunteerTimeframe
