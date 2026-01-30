@@ -53,3 +53,23 @@ class ReportVolunteerTimeframe(forms.Form):
     end_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
                                                       attrs={'type': 'date',
                                                              'maxDate': datetime.now().date()}))
+
+class ReportCategoryHours(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_action = reverse_lazy('rpt_cat_hours')
+        self.helper.form_method = "post"
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+    start_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
+                                                        attrs={'type': 'date',
+                                                               'maxDate': datetime.now().date(),
+                                                               'date': datetime.now().date(),
+                                                               }))
+
+
+    end_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
+                                                      attrs={'type': 'date',
+                                                             'maxDate': datetime.now().date()}))
