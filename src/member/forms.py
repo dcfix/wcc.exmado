@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AdminUserCreationForm
+from django.contrib.auth.forms import UserChangeForm, AdminUserCreationForm
 
 from .models import CustomUser
 
