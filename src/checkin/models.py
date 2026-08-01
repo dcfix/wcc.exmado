@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 
 # We want to keep track of how many people are attending an avent at the WCC
 # This could be lunch, a fitness class, a board meeting, etc.
@@ -81,6 +82,9 @@ class CheckIn(models.Model):
 
     event = models.ForeignKey('Event', on_delete=models.RESTRICT, null=False)
     isMember = models.BooleanField(null=True)
+    activity_date = models.DateField(
+        default=timezone.localdate,
+        help_text="The date the activity actually took place.")
 
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL,
