@@ -1,9 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django import forms
 from django.urls import reverse_lazy
+from django.utils import timezone
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+
+
+def _default_start_date():
+    return timezone.localdate() - timedelta(days=7)
 
 
 class CheckInForm(forms.Form):
@@ -20,11 +25,13 @@ class ReportVolunteerTimeframe(forms.Form):
         self.helper.form_method = "post"
         self.helper.add_input(Submit('submit', 'Submit'))
 
-    start_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
+    start_date = forms.DateField(initial=_default_start_date,
+                                 widget=forms.DateInput(format='%m/%d/%Y',
                                                         attrs={'type': 'date',
                                                                'maxDate': datetime.now().date()}))
 
-    end_date = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y',
+    end_date = forms.DateField(initial=timezone.localdate,
+                               widget=forms.DateInput(format='%m/%d/%Y',
                                                       attrs={'type': 'date',
                                                              'date': datetime.now().date(),
                                                              'maxDate': datetime.now().date()}))

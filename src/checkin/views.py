@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
 from django.shortcuts import render
+from django.utils import timezone
 
 from .models import Category, Event, CheckIn
 from .forms import CheckInForm, ReportVolunteerTimeframe
@@ -104,8 +105,8 @@ def rpt_timeframe_activity(request):
         raise PermissionDenied
 
     form = ReportVolunteerTimeframe()
-    start_date = datetime.date.today() - datetime.timedelta(days=7)
-    end_date = datetime.date.today() + datetime.timedelta(days=2)
+    start_date = timezone.localdate() - datetime.timedelta(days=7)
+    end_date = timezone.localdate()
 
     # given a time frame, give the cumulative hours/miles per volunteer
     if request.method == "POST":
@@ -117,13 +118,11 @@ def rpt_timeframe_activity(request):
         if form.is_valid():
             # we need to save the new data
             start_date = form.cleaned_data["start_date"]
-            end_date = form.cleaned_data["end_date"] + datetime.timedelta(days=1)
-    else:
-        form.start_date = start_date
-        form.end_date = end_date
+            end_date = form.cleaned_data["end_date"]
 
+    # activity_date is a plain date, so this range is inclusive on both ends.
     # Get raw data grouped by event and membership status
-    raw_entries = CheckIn.objects.filter(created_date__range=[start_date, end_date])\
+    raw_entries = CheckIn.objects.filter(activity_date__range=[start_date, end_date])\
         .values('event__desc', 'isMember')\
         .order_by('event__desc', 'isMember')\
         .annotate(total_attendance=Sum('number_in_group'))
@@ -167,5 +166,4 @@ def rpt_timeframe_activity(request):
     context = {"form": form,
                "entries": entries,
                "totals": totals}
-    print(context["form"]["start_date"])
     return render(request, 'rpt_timeframe_activity.html', context)

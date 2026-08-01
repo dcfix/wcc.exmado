@@ -1,0 +1,46 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Django: runserver",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/manage.py",
+      "args": ["runserver"],
+      "cwd": "${workspaceFolder}/src",
+      "django": true,
+      "autoStartBrowser": false,
+      "justMyCode": true
+    },
+    {
+      "name": "Django: tests",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/manage.py",
+      "args": ["test"],
+      "cwd": "${workspaceFolder}/src",
+      "django": true,
+      "justMyCode": false
+    },
+    {
+      "name": "Django: shell_plus",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/manage.py",
+      "args": ["shell_plus"],
+      "cwd": "${workspaceFolder}/src",
+      "django": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Django: migrate",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/manage.py",
+      "args": ["migrate"],
+      "cwd": "${workspaceFolder}/src",
+      "django": true,
+      "console": "integratedTerminal"
+    }
+  ]
+}
